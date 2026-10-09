@@ -20,7 +20,7 @@ const SCENES = {
         duration: 4,
         description:
           "Rain-streaked window with Manchester cityscape visible through it. Digital clock on bedside table reads 11:47 PM in foreground.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3q5vp00424gvnfm9kio1x.png",
+        imageUrl: "/marketing/demo/warning-call-1.png",
       },
       {
         shotNumber: 2,
@@ -31,7 +31,7 @@ const SCENES = {
         duration: 6,
         description:
           "Daniel sits at his desk bathed in blue laptop light, face exhausted, multiple empty coffee cups beside him.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3q5vn00414gvnwjbdn1uq.png",
+        imageUrl: "/marketing/demo/warning-call-2.png",
       },
       {
         shotNumber: 3,
@@ -41,7 +41,7 @@ const SCENES = {
         movement: "Static",
         duration: 3,
         description: "Daniel's phone vibrates on the desk, screen displays UNKNOWN NUMBER.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3q5up00404gvn2xupsq7y.png",
+        imageUrl: "/marketing/demo/warning-call-3.png",
       },
       {
         shotNumber: 4,
@@ -52,7 +52,7 @@ const SCENES = {
         duration: 8,
         description:
           "Daniel's face as he holds phone to ear, confusion and concern building in his expression as he listens.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3q8br00434gvnwm7xj0vh.png",
+        imageUrl: "/marketing/demo/warning-call-4.png",
       },
     ],
   },
@@ -70,7 +70,7 @@ const SCENES = {
         duration: 5,
         description:
           "Rain-soaked Manchester street, neon reflections in puddles. Daniel bursts from apartment building entrance and runs down the street.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qa6500474gvn9lhv5qth.png",
+        imageUrl: "/marketing/demo/chase-1.png",
       },
       {
         shotNumber: 2,
@@ -81,7 +81,7 @@ const SCENES = {
         duration: 6,
         description:
           "Daniel running along wet sidewalk, cars splashing through puddles behind him. He pulls out phone while running.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qadp00484gvnluyrxya4.png",
+        imageUrl: "/marketing/demo/chase-2.png",
       },
       {
         shotNumber: 3,
@@ -92,7 +92,7 @@ const SCENES = {
         duration: 3,
         description:
           "Phone screen in Daniel's hand shows 11:52 PM and notification: 12 MINUTES. Rain droplets hit the screen.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qbpj00494gvndveckxl5.png",
+        imageUrl: "/marketing/demo/chase-3.png",
       },
       {
         shotNumber: 4,
@@ -103,7 +103,7 @@ const SCENES = {
         duration: 4,
         description:
           "Daniel stops abruptly, breathing heavily. He slowly looks around the empty street, uncertain and afraid.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qc68004a4gvn1oowmvoe.png",
+        imageUrl: "/marketing/demo/chase-4.png",
       },
     ],
   },
@@ -121,7 +121,7 @@ const SCENES = {
         duration: 4,
         description:
           "Exterior of Manchester train station, rain falling. Daniel runs toward entrance. Wet pavement reflects station lights.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qgvx004i4gvnanpkb2gp.png",
+        imageUrl: "/marketing/demo/last-train-1.png",
       },
       {
         shotNumber: 2,
@@ -131,7 +131,7 @@ const SCENES = {
         movement: "Static",
         duration: 3,
         description: "Electronic departure board: LAST TRAIN — 12:05 AM, PLATFORM 4.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qhb8004j4gvnog6n4k81.png",
+        imageUrl: "/marketing/demo/last-train-2.png",
       },
       {
         shotNumber: 3,
@@ -141,7 +141,7 @@ const SCENES = {
         movement: "Handheld",
         duration: 2,
         description: "Daniel's phone in his trembling hand: 11:59 PM.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qhqg004k4gvnjp8mdvbw.png",
+        imageUrl: "/marketing/demo/last-train-3.png",
       },
       {
         shotNumber: 4,
@@ -152,7 +152,7 @@ const SCENES = {
         duration: 4,
         description:
           "Daniel sprints down station stairs toward platform, camera tracks alongside him at high speed.",
-        imageUrl: "/generated/cmuu1rncp001y4gvnzav773e3/cmuu3qjac004m4gvnfktc0yq9.png",
+        imageUrl: "/marketing/demo/last-train-4.png",
       },
     ],
   },

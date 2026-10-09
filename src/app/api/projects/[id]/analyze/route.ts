@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { getLLMProvider } from "@/lib/ai/factory";
 import { projectInclude } from "@/lib/types";
 
+export const maxDuration = 60;
+
 type Params = { params: Promise<{ id: string }> };
 
 export async function POST(_req: Request, { params }: Params) {

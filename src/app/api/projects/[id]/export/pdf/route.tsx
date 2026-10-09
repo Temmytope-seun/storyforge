@@ -30,9 +30,10 @@ export async function GET(_req: Request, { params }: Params) {
   for (const scene of project.scenes) {
     for (const shot of scene.shots) {
       if (shot.frame?.imageUrl && !frameBuffers.has(shot.frame.imageUrl)) {
-        const absolutePath = path.join(process.cwd(), "public", shot.frame.imageUrl);
         try {
-          const raw = await readFile(absolutePath);
+          const raw = shot.frame.imageUrl.startsWith("http")
+            ? Buffer.from(await (await fetch(shot.frame.imageUrl)).arrayBuffer())
+            : await readFile(path.join(process.cwd(), "public", shot.frame.imageUrl));
           const resized = await sharp(raw).resize({ width: 480 }).jpeg({ quality: 80 }).toBuffer();
           frameBuffers.set(shot.frame.imageUrl, resized);
         } catch {

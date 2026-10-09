@@ -4,6 +4,11 @@ import { getImageProvider } from "@/lib/ai/factory";
 import { buildFramePrompt } from "@/lib/ai/prompts";
 import { saveGeneratedImage } from "@/lib/storage/local";
 
+// Image generation has taken up to ~60s in testing; raises the serverless
+// execution limit so it isn't cut off mid-request. Vercel caps this per plan
+// (check your plan's actual max and raise further if generations still time out).
+export const maxDuration = 60;
+
 type Params = { params: Promise<{ id: string }> };
 
 export async function POST(_req: Request, { params }: Params) {
