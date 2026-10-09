@@ -117,3 +117,7 @@ export function updateCharacter(id: string, data: Partial<{ name: string; descri
 export function deleteCharacter(id: string) {
   return request(`/api/characters/${id}`, { method: "DELETE" });
 }
+
+export function joinWaitlist(data: { email: string; name?: string; note?: string; company?: string }) {
+  return request(`/api/waitlist`, { method: "POST", body: JSON.stringify(data) });
+}

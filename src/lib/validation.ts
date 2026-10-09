@@ -89,3 +89,11 @@ export const updateCharacterSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().min(1).max(2000).optional(),
 });
+
+export const createWaitlistEntrySchema = z.object({
+  email: z.string().trim().min(1).email().max(255),
+  name: z.string().trim().max(100).optional(),
+  note: z.string().trim().max(2000).optional(),
+  // Honeypot: real users never fill this hidden field; bots that fill every field will.
+  company: z.string().max(0).optional(),
+});

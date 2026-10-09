@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>StoryForge AI — Brag</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/TextPlugin.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: #07090e;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+      /* shared full-bleed background — not a clip */
+      #bg { position: absolute; inset: 0; background: #07090e; z-index: 0; }
+
+      .scene { overflow: hidden; }
+      .scene-inner { position: absolute; inset: 0; }
+
+      .mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; }
+      .ink { color: #dfe2eb; }
+      .ink-dim { color: #8b92a3; }
+      .tally { color: #f59e0b; }
+      .telemetry { color: #38bdf8; }
+
+      .caps { text-transform: uppercase; letter-spacing: 0.08em; }
+
+      /* ---------- Scene 1 : cold open ---------- */
+      #s1-inner { background: #000; }
+      .kb-wrap { position: absolute; inset: 0; overflow: hidden; }
+      .kb-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: center center; }
+      .scrim-bottom {
+        position: absolute; inset: 0;
+        background: linear-gradient(to top, rgba(7,9,14,0.92) 0%, rgba(7,9,14,0.35) 28%, rgba(7,9,14,0) 55%);
+      }
+      .hook-caption {
+        position: absolute; left: 90px; bottom: 90px;
+        display: flex; align-items: center; gap: 14px;
+      }
+      .rec-dot { width: 12px; height: 12px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 14px rgba(239,68,68,0.7); }
+      .hook-caption span.label {
+        font-size: 30px; font-weight: 600; letter-spacing: 0.12em;
+      }
+
+      /* ---------- Scene 2 : reveal ---------- */
+      #s2-inner { background: #0d1117; display: flex; align-items: center; justify-content: center; }
+      .brief-card { width: 1180px; display: flex; flex-direction: column; gap: 22px; }
+      .field-label { font-size: 22px; font-weight: 600; letter-spacing: 0.1em; }
+      .brief-box {
+        background: #131923; border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 14px; padding: 40px 44px; min-height: 190px;
+        display: flex; align-items: flex-start;
+      }
+      .brief-text { font-size: 38px; line-height: 1.45; font-weight: 450; }
+      #cursor2 {
+        display: inline-block; width: 4px; height: 40px; background: #f59e0b;
+        margin-left: 4px; transform: translateY(6px);
+      }
+      @keyframes blink2 { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+      .cursor-blink2 { animation: blink2 0.8s step-end infinite; }
+      .cursor-solid2 { animation: none; opacity: 1; }
+      .action-row { position: relative; height: 92px; display: flex; align-items: center; }
+      .gen-btn {
+        position: absolute; inset: 0;
+        background: #f59e0b; color: #07090e; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 30px; font-weight: 700; letter-spacing: 0.04em;
+      }
+      .progress-row { position: absolute; inset: 0; display: flex; align-items: center; gap: 18px; opacity: 0; }
+      .spinner {
+        width: 34px; height: 34px; border-radius: 50%;
+        border: 4px solid rgba(255,255,255,0.12); border-top-color: #f59e0b;
+      }
+      .progress-text { font-size: 30px; }
+
+      /* ---------- Scene 3 : shot grid ---------- */
+      #s3-inner { background: #07090e; }
+      .studio-topbar {
+        position: absolute; top: 0; left: 0; right: 0; height: 104px;
+        background: #0d1117; border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; padding: 0 70px; gap: 22px;
+      }
+      .traffic { display: flex; gap: 8px; }
+      .traffic span { width: 15px; height: 15px; border-radius: 50%; }
+      .traffic .r { background: rgba(239,68,68,0.45); }
+      .traffic .a { background: rgba(245,158,11,0.45); }
+      .traffic .c { background: rgba(56,189,248,0.45); }
+      .proj-label { font-size: 22px; letter-spacing: 0.1em; }
+      .status-badge { display: flex; align-items: center; gap: 8px; font-size: 20px; letter-spacing: 0.08em; margin-left: auto; }
+      .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #38bdf8; }
+      .bridge-caption {
+        position: absolute; top: 132px; left: 70px;
+        font-size: 24px; letter-spacing: 0.06em; opacity: 0;
+      }
+      .grid-row {
+        position: absolute; top: 200px; left: 70px; right: 70px; bottom: 70px;
+        display: flex; gap: 32px;
+      }
+      .shot-card {
+        position: relative; flex: 1; display: flex; flex-direction: column;
+        background: #131923; border-radius: 12px; overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.08);
+        opacity: 0;
+      }
+      .shot-card .img-box { position: relative; flex: 1; background: #0d1117; }
+      .shot-card .img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .shot-tag {
+        position: absolute; left: 14px; top: 14px;
+        background: rgba(7,9,14,0.75); padding: 6px 10px; border-radius: 5px;
+        font-size: 17px; letter-spacing: 0.05em; display: flex; align-items: center; gap: 7px;
+      }
+      .shot-tag .dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; }
+      .shot-dur {
+        position: absolute; right: 12px; bottom: 12px;
+        background: rgba(7,9,14,0.75); padding: 5px 10px; border-radius: 5px; font-size: 16px;
+      }
+      .shot-meta { padding: 16px 18px; font-size: 18px; letter-spacing: 0.02em; }
+      .shot-meta .sep { color: rgba(255,255,255,0.45); margin: 0 8px; }
+      .glow3 {
+        position: absolute; left: 50%; top: 56%; width: 1400px; height: 900px;
+        transform: translate(-50%, -50%) scale(1);
+        background: radial-gradient(circle, rgba(245,158,11,0.16) 0%, rgba(245,158,11,0) 62%);
+        opacity: 0.5; pointer-events: none;
+      }
+
+      /* ---------- Scene 4 : consistency ---------- */
+      #s4-inner { background: #07090e; }
+      .panel-slot { position: absolute; top: 150px; }
+      .char-panel {
+        width: 480px; height: 560px; border-radius: 14px; overflow: hidden;
+        border: 2px solid rgba(245,158,11,0.35); background: #131923;
+        opacity: 0;
+      }
+      .char-panel img { width: 100%; height: 100%; object-fit: cover; }
+      .connect-line {
+        position: absolute; top: 430px; left: 50%; transform: translateX(-50%);
+        width: 1180px; height: 2px; background: linear-gradient(90deg, rgba(245,158,11,0) 0%, rgba(245,158,11,0.55) 50%, rgba(245,158,11,0) 100%);
+        opacity: 0;
+      }
+      .callout-slot { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); }
+      .consistency-callout {
+        font-size: 54px; font-weight: 700; letter-spacing: 0.04em; text-align: center;
+        opacity: 0; white-space: nowrap;
+      }
+      .glow4 {
+        position: absolute; left: 50%; top: 42%; width: 1500px; height: 950px;
+        transform: translate(-50%, -50%) scale(1);
+        background: radial-gradient(circle, rgba(245,158,11,0.14) 0%, rgba(245,158,11,0) 62%);
+        opacity: 0.5; pointer-events: none;
+      }
+
+      /* ---------- Scene 5 : export + outro ---------- */
+      #s5-inner { background: #07090e; display: flex; align-items: center; justify-content: center; }
+      .export-cluster { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+      .export-btn {
+        background: #f59e0b; color: #07090e; border-radius: 10px;
+        padding: 26px 58px; font-size: 32px; font-weight: 700; letter-spacing: 0.04em;
+      }
+      .logo-cluster {
+        position: absolute; left: 50%; top: 46%;
+        display: flex; flex-direction: column; align-items: center; gap: 26px;
+        opacity: 0;
+      }
+      .logo-mark {
+        width: 120px; height: 120px; border-radius: 22px;
+        background: linear-gradient(135deg, #fde68a 0%, #f59e0b 55%, #f97316 100%);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      }
+      .logo-mark span { display: block; width: 72px; height: 13px; border-radius: 4px; background: #1a1206; }
+      .logo-mark span:nth-child(2) { opacity: 0.72; }
+      .logo-mark span:nth-child(3) { opacity: 0.45; width: 54px; }
+      .wordmark { font-size: 58px; font-weight: 700; letter-spacing: -0.01em; }
+      .tagline { font-size: 26px; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="19.5"
+    >
+      <div id="bg"></div>
+
+      <!-- ================= SCENE 1 — COLD OPEN ================= -->
+      <section id="s1" class="clip scene" data-start="0" data-duration="3">
+        <div id="s1-inner" class="scene-inner">
+          <div class="kb-wrap">
+            <img id="s1-img" src="assets/images/cmuu3q5vp00424gvnfm9kio1x.png" alt="Daniel at his desk, rain on the window" data-layout-allow-overflow />
+          </div>
+          <div class="scrim-bottom"></div>
+          <div class="hook-caption">
+            <div id="s1-dot" class="rec-dot"></div>
+            <span id="s1-caption" class="label mono ink">11:47 PM &middot; UNKNOWN NUMBER</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCENE 2 — THE REVEAL ================= -->
+      <section id="s2" class="clip scene" data-start="2.75" data-duration="4.25">
+        <div id="s2-inner" class="scene-inner">
+          <div class="brief-card">
+            <div class="field-label mono ink-dim caps">Idea / Brief</div>
+            <div class="brief-box">
+              <div class="brief-text ink"><span id="s2-typed"></span><span id="s2-cursor" class="cursor-blink2">|</span></div>
+            </div>
+            <div class="action-row">
+              <div id="s2-btn" class="gen-btn">Generate Storyboard</div>
+              <div id="s2-progress" class="progress-row">
+                <div id="s2-spinner" class="spinner"></div>
+                <div class="progress-text ink">Analysing story&hellip;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCENE 3 — THE SHOT GRID ================= -->
+      <section id="s3" class="clip scene" data-start="6.75" data-duration="4.75">
+        <div id="s3-inner" class="scene-inner">
+          <div class="glow3" id="s3-glow"></div>
+          <div class="studio-topbar">
+            <div class="traffic"><span class="r"></span><span class="a"></span><span class="c"></span></div>
+            <div class="proj-label mono ink-dim">PROJECT: THE_LAST_TRAIN</div>
+            <div class="status-badge mono ink-dim"><span class="status-dot"></span>ANALYZED</div>
+          </div>
+          <div id="s3-bridge" class="bridge-caption mono ink-dim caps">Planning shots and camera coverage&hellip;</div>
+
+          <div class="grid-row">
+            <div id="s3-card1" class="shot-card">
+              <div class="img-box">
+                <img src="assets/images/cmuu3q5vp00424gvnfm9kio1x.png" alt="Shot 01 establishing wide" />
+                <div class="shot-tag mono tally"><span class="dot"></span>SHOT 01 &middot; ESTABLISHING WIDE</div>
+                <div class="shot-dur mono ink">4s</div>
+              </div>
+              <div class="shot-meta mono ink-dim">High angle<span class="sep">&bull;</span><span class="telemetry">35mm</span><span class="sep">&bull;</span>Static</div>
+            </div>
+            <div id="s3-card2" class="shot-card">
+              <div class="img-box">
+                <img src="assets/images/cmuu3qc68004a4gvn1oowmvoe.png" alt="Shot 02 medium close-up" />
+                <div class="shot-tag mono tally"><span class="dot"></span>SHOT 02 &middot; MEDIUM CLOSE-UP</div>
+                <div class="shot-dur mono ink">6s</div>
+              </div>
+              <div class="shot-meta mono ink-dim">Eye level<span class="sep">&bull;</span><span class="telemetry">50mm</span><span class="sep">&bull;</span>Static</div>
+            </div>
+            <div id="s3-card3" class="shot-card">
+              <div class="img-box">
+                <img src="assets/images/cmuu3q8br00434gvnwm7xj0vh.png" alt="Shot 04 close-up" />
+                <div class="shot-tag mono tally"><span class="dot"></span>SHOT 04 &middot; CLOSE-UP</div>
+                <div class="shot-dur mono ink">8s</div>
+              </div>
+              <div class="shot-meta mono ink-dim">Eye level<span class="sep">&bull;</span><span class="telemetry">85mm</span><span class="sep">&bull;</span>Static</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCENE 4 — CHARACTER CONSISTENCY ================= -->
+      <section id="s4" class="clip scene" data-start="11.25" data-duration="4.75">
+        <div id="s4-inner" class="scene-inner">
+          <div class="glow4" id="s4-glow"></div>
+          <div class="panel-slot" style="left:50%; transform:translateX(calc(-50% - 520px));">
+            <div id="s4-panel1" class="char-panel"><img src="assets/images/cmuu3q8br00434gvnwm7xj0vh.png" alt="Daniel, desk" /></div>
+          </div>
+          <div class="panel-slot" style="left:50%; transform:translateX(-50%);">
+            <div id="s4-panel2" class="char-panel"><img src="assets/images/cmuu3qadp00484gvnluyrxya4.png" alt="Daniel, running in the rain" /></div>
+          </div>
+          <div class="panel-slot" style="left:50%; transform:translateX(calc(-50% + 520px));">
+            <div id="s4-panel3" class="char-panel"><img src="assets/images/cmuu3qjac004m4gvnfktc0yq9.png" alt="Daniel, sprinting down station stairs" /></div>
+          </div>
+          <div id="s4-line" class="connect-line"></div>
+          <div class="callout-slot">
+            <div id="s4-callout" class="consistency-callout tally mono">SAME CHARACTER. EVERY SHOT.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCENE 5 — EXPORT &amp; OUTRO ================= -->
+      <section id="s5" class="clip scene" data-start="15.75" data-duration="3.75">
+        <div id="s5-inner" class="scene-inner">
+          <div id="s5-export" class="export-cluster">
+            <div id="s5-export-btn" class="export-btn">Export PDF</div>
+          </div>
+          <div id="s5-logo" class="logo-cluster">
+            <div class="logo-mark"><span></span><span></span><span></span></div>
+            <div class="wordmark ink">StoryForge AI</div>
+            <div id="s5-tagline" class="tagline ink-dim">Turn ideas into professional storyboards in minutes.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= AUDIO ================= -->
+      <audio id="music" data-start="0" data-duration="19.5" data-track-index="10"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0.06},{"t":2.75,"v":0.06},{"t":3.4,"v":0.3},{"t":15.6,"v":0.3},{"t":16.3,"v":0.35},{"t":18.6,"v":0.3},{"t":19.5,"v":0}]}]}'
+        src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3"></audio>
+
+      <!-- typing ticks (thinned, cycle 6 keypress files) -->
+      <audio id="sfx-type-01" data-start="3.05" data-duration="0.3" data-volume="0.35" data-track-index="11" src="assets/sfx/keyboard/keypress-001.wav"></audio>
+      <audio id="sfx-type-02" data-start="3.23" data-duration="0.3" data-volume="0.35" data-track-index="12" src="assets/sfx/keyboard/keypress-004.wav"></audio>
+      <audio id="sfx-type-03" data-start="3.41" data-duration="0.3" data-volume="0.35" data-track-index="13" src="assets/sfx/keyboard/keypress-007.wav"></audio>
+      <audio id="sfx-type-04" data-start="3.59" data-duration="0.3" data-volume="0.35" data-track-index="14" src="assets/sfx/keyboard/keypress-010.wav"></audio>
+      <audio id="sfx-type-05" data-start="3.78" data-duration="0.3" data-volume="0.35" data-track-index="15" src="assets/sfx/keyboard/keypress-013.wav"></audio>
+      <audio id="sfx-type-06" data-start="3.96" data-duration="0.3" data-volume="0.35" data-track-index="16" src="assets/sfx/keyboard/keypress-016.wav"></audio>
+      <audio id="sfx-type-07" data-start="4.14" data-duration="0.3" data-volume="0.35" data-track-index="17" src="assets/sfx/keyboard/keypress-001.wav"></audio>
+      <audio id="sfx-type-08" data-start="4.32" data-duration="0.3" data-volume="0.35" data-track-index="18" src="assets/sfx/keyboard/keypress-004.wav"></audio>
+      <audio id="sfx-type-09" data-start="4.51" data-duration="0.3" data-volume="0.35" data-track-index="19" src="assets/sfx/keyboard/keypress-007.wav"></audio>
+      <audio id="sfx-type-10" data-start="4.69" data-duration="0.3" data-volume="0.35" data-track-index="20" src="assets/sfx/keyboard/keypress-010.wav"></audio>
+      <audio id="sfx-type-11" data-start="4.87" data-duration="0.3" data-volume="0.35" data-track-index="21" src="assets/sfx/keyboard/keypress-013.wav"></audio>
+      <audio id="sfx-type-12" data-start="5.05" data-duration="0.3" data-volume="0.35" data-track-index="22" src="assets/sfx/keyboard/keypress-016.wav"></audio>
+      <audio id="sfx-type-13" data-start="5.24" data-duration="0.3" data-volume="0.35" data-track-index="23" src="assets/sfx/keyboard/keypress-001.wav"></audio>
+      <audio id="sfx-type-14" data-start="5.42" data-duration="0.3" data-volume="0.35" data-track-index="24" src="assets/sfx/keyboard/keypress-004.wav"></audio>
+      <audio id="sfx-type-15" data-start="5.60" data-duration="0.3" data-volume="0.35" data-track-index="25" src="assets/sfx/keyboard/keypress-007.wav"></audio>
+      <audio id="sfx-type-16" data-start="5.78" data-duration="0.3" data-volume="0.35" data-track-index="26" src="assets/sfx/keyboard/keypress-010.wav"></audio>
+
+      <audio id="sfx-click-generate" data-start="6.30" data-duration="0.02" data-volume="0.7" data-track-index="27" src="assets/sfx/interface/click_003.ogg"></audio>
+      <audio id="sfx-card-1" data-start="7.05" data-duration="0.6" data-volume="0.6" data-track-index="28" src="assets/sfx/casino/card-slide-1.ogg"></audio>
+      <!-- beat-locked: 8.74s (strong_beat 0.99, happy-beats vol-12 preset) -->
+      <audio id="sfx-card-3" data-start="8.74" data-duration="0.6" data-volume="0.6" data-track-index="29" src="assets/sfx/casino/card-slide-1.ogg"></audio>
+      <!-- beat-locked: 13.11s (strong_beat 0.98, happy-beats vol-12 preset) -->
+      <audio id="sfx-callout" data-start="13.11" data-duration="0.19" data-volume="0.65" data-track-index="30" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+      <audio id="sfx-click-export" data-start="16.25" data-duration="0.02" data-volume="0.7" data-track-index="31" src="assets/sfx/interface/click_003.ogg"></audio>
+      <!-- beat-locked: 17.47s (strong_beat 0.99, happy-beats vol-12 preset) -->
+      <audio id="sfx-logo-bell" data-start="17.47" data-duration="0.31" data-volume="0.75" data-track-index="32" src="assets/sfx/impact/impactBell_heavy_004.ogg"></audio>
+    </div>
+
+    <script>
+      (function build() {
+        // ---- synchronously pre-load trimmed audio-reactive data (RMS/bands, 10fps, 0-19.6s) ----
+        var AUDIO_DATA = null;
+        try {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "assets/music/audio-data-trimmed.json", false);
+          xhr.send();
+          AUDIO_DATA = JSON.parse(xhr.responseText);
+        } catch (e) {
+          AUDIO_DATA = null;
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ============ SCENE 1 — COLD OPEN (0 - 3) ============ */
+        tl.fromTo("#s1-inner", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+        tl.fromTo("#s1-img", { scale: 1.0 }, { scale: 1.05, duration: 3, ease: "sine.inOut" }, 0);
+        tl.fromTo("#s1-caption", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.4);
+        tl.to("#s1-dot", { opacity: 0.35, duration: 0.3, ease: "sine.inOut", repeat: 5, yoyo: true }, 0.4);
+
+        /* ============ SCENE 2 — THE REVEAL (2.75 - 7.0) ============ */
+        var S2 = 2.75;
+        tl.fromTo("#s2-inner", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, S2);
+
+        var sentence = "Daniel, a software engineer, receives a chilling call from an unknown number late at night.";
+        var typeDur = +(sentence.length / 32).toFixed(2); // ~2.94s
+        tl.call(function () {
+          document.getElementById("s2-cursor").className = "cursor-solid2";
+        }, [], S2 + 0.30);
+        tl.to("#s2-typed", { text: { value: sentence }, duration: typeDur, ease: "none" }, S2 + 0.30);
+        tl.call(function () {
+          document.getElementById("s2-cursor").className = "cursor-blink2";
+        }, [], S2 + 0.30 + typeDur);
+
+        var clickT = S2 + 3.55;
+        tl.to("#s2-btn", { scale: 0.93, duration: 0.08, ease: "power1.in" }, clickT);
+        tl.to("#s2-btn", { scale: 1, duration: 0.14, ease: "back.out(2)" }, clickT + 0.08);
+        tl.to("#s2-btn", { opacity: 0, duration: 0.15, ease: "power1.in" }, clickT + 0.05);
+        tl.to("#s2-progress", { opacity: 1, duration: 0.15, ease: "power1.out" }, clickT + 0.10);
+        tl.to("#s2-spinner", { rotation: 360, duration: 0.8, ease: "none", repeat: 6 }, clickT + 0.10);
+
+        /* ============ SCENE 3 — THE SHOT GRID (6.75 - 11.5) ============ */
+        var S3 = 6.75;
+        tl.fromTo("#s3-inner", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, S3);
+        tl.fromTo("#s3-bridge", { opacity: 0 }, { opacity: 1, duration: 0.1 }, S3 + 0.0);
+        tl.to("#s3-bridge", { opacity: 0, duration: 0.15 }, S3 + 0.45);
+
+        tl.fromTo("#s3-card1", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, S3 + 0.30);
+        tl.fromTo("#s3-card2", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, S3 + 1.00);
+        // beat-locked: 8.74s (third card)
+        tl.fromTo("#s3-card3", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 8.74);
+
+        /* ============ SCENE 4 — CHARACTER CONSISTENCY (11.25 - 16.0) ============ */
+        var S4 = 11.25;
+        tl.fromTo("#s4-inner", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, S4);
+        tl.fromTo("#s4-panel1", { opacity: 0, scale: 0.80 }, { opacity: 1, scale: 0.88, duration: 0.4, ease: "back.out(1.5)" }, S4 + 0.20);
+        tl.fromTo("#s4-panel2", { opacity: 0, scale: 0.80 }, { opacity: 1, scale: 0.88, duration: 0.4, ease: "back.out(1.5)" }, S4 + 0.35);
+        tl.fromTo("#s4-panel3", { opacity: 0, scale: 0.80 }, { opacity: 1, scale: 0.88, duration: 0.4, ease: "back.out(1.5)" }, S4 + 0.50);
+        tl.fromTo("#s4-line", { opacity: 0 }, { opacity: 1, duration: 0.4 }, S4 + 0.55);
+        // beat-locked: 13.11s (consistency callout)
+        tl.fromTo("#s4-callout", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 13.11);
+
+        /* ============ SCENE 5 — EXPORT & OUTRO (15.75 - 19.5) ============ */
+        var S5 = 15.75;
+        tl.fromTo("#s5-inner", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, S5);
+        tl.fromTo("#s5-export", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(1.6)" }, S5 + 0.25);
+        var exportClick = S5 + 0.50;
+        tl.to("#s5-export-btn", { scale: 0.93, duration: 0.08, ease: "power1.in" }, exportClick);
+        tl.to("#s5-export-btn", { scale: 1, duration: 0.14, ease: "back.out(2)" }, exportClick + 0.08);
+        tl.to("#s5-export", { opacity: 0, scale: 0.85, duration: 0.25, ease: "power1.in" }, S5 + 0.75);
+
+        tl.set("#s5-logo", { xPercent: -50, yPercent: -50 }, 0);
+        tl.fromTo("#s5-logo", { opacity: 0, scale: 0.80 }, { opacity: 1, scale: 1, duration: 0.52, ease: "back.out(1.7)" }, S5 + 1.20);
+        // beat-locked: 17.47s (logo lockup lands)
+        tl.fromTo("#s5-tagline", { opacity: 0 }, { opacity: 1, duration: 0.3 }, S5 + 1.90);
+
+        /* ============ Subtle audio-reactive glow, Scenes 3 & 4 only ============ */
+        if (AUDIO_DATA) {
+          var fps = AUDIO_DATA.fps;
+          AUDIO_DATA.frames.forEach(function (f) {
+            if (f.time < 6.75 || f.time >= 16.0) return;
+            var rms = f.rms || 0;
+            var active = f.time >= 6.75 && f.time < 11.5 ? "#s3-glow" : (f.time >= 11.25 && f.time < 16.0 ? "#s4-glow" : null);
+            if (!active) return;
+            tl.call(function () {
+              var el = document.querySelector(active);
+              if (!el) return;
+              var k = 0.9 + rms * 0.22;
+              el.style.transform = "translate(-50%, -50%) scale(" + k.toFixed(3) + ")";
+              el.style.opacity = (0.40 + rms * 0.28).toFixed(3);
+            }, [], f.time);
+          });
+        }
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

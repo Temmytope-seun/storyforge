@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Camera, Film, FileText, Sparkles, ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 // Real scenes/shots/generated images from an actual StoryForge project ("The Last Train").
 const SCENES = {
@@ -322,13 +321,13 @@ export function InteractiveDemo() {
             </span>
           </div>
         </div>
-        <Link
-          href="/projects/new"
+        <a
+          href="#waitlist"
           className="flex items-center gap-1 rounded bg-tally px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-tally-on transition-colors hover:bg-[#ffc174]"
         >
-          Open in Full Studio
+          Get Early Access
           <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+        </a>
       </div>
     </div>
   );

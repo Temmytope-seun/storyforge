@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import {
   Clapperboard,
@@ -7,12 +6,14 @@ import {
   FileCode2,
   Mic,
   PenLine,
+  Play,
   Video,
 } from "lucide-react";
 import { MarketingButton } from "@/components/marketing/MarketingButton";
 import { InteractiveDemo } from "@/components/marketing/InteractiveDemo";
+import { TrailerVideo } from "@/components/marketing/TrailerVideo";
 import { PricingSection } from "@/components/marketing/PricingSection";
-import { PromptCTA } from "@/components/marketing/PromptCTA";
+import { WaitlistForm } from "@/components/marketing/WaitlistForm";
 import { Logo } from "@/components/marketing/Logo";
 import { Blob } from "@/components/marketing/Blob";
 import { StudioGrid } from "@/components/marketing/StudioGrid";
@@ -120,14 +121,9 @@ export default function LandingPage() {
               Pricing
             </a>
           </nav>
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="hidden text-sm text-ink-dim hover:text-ink sm:inline">
-              Log in
-            </Link>
-            <Link href="/projects/new">
-              <MarketingButton size="sm">Get Started</MarketingButton>
-            </Link>
-          </div>
+          <a href="#waitlist">
+            <MarketingButton size="sm">Get Early Access</MarketingButton>
+          </a>
         </div>
       </header>
 
@@ -164,9 +160,9 @@ export default function LandingPage() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/projects/new">
-                <MarketingButton size="lg">Create Your First Storyboard</MarketingButton>
-              </Link>
+              <a href="#waitlist">
+                <MarketingButton size="lg">Get Early Access</MarketingButton>
+              </a>
               <a href="#demo">
                 <MarketingButton size="lg" variant="outline">
                   Interactive Preview
@@ -177,16 +173,52 @@ export default function LandingPage() {
           <FadeIn delay={0.25}>
             <p className="mt-4 flex items-center justify-center gap-1.5 font-mono text-xs text-ink-dim">
               <span className="text-tally">✓</span>
-              No credit card required · Export to PDF
+              No credit card required · Reserve your spot
             </p>
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-80">
+            <a
+              href="#trailer"
+              className="mt-10 inline-flex items-center gap-2 text-sm text-ink-dim hover:text-ink"
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.06]">
+                <Play className="h-3 w-3 translate-x-0.5 fill-current" />
+              </span>
+              Watch the 20-second trailer
+            </a>
+          </FadeIn>
+
+          <FadeIn delay={0.35}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-80">
               <span className="text-sm text-ink-dim">
                 Built for independent filmmakers, advertising creatives and content creators
               </span>
             </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Trailer */}
+      <section id="trailer" className="border-t border-studio-border px-6 py-20">
+        <div className="mx-auto max-w-4xl">
+          <FadeIn className="mb-8 text-center">
+            <div className="mb-1 flex items-center justify-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-tally shadow-[0_0_8px_#f59e0b]" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.06em] text-tally">
+                Watch
+              </span>
+            </div>
+            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
+              See It In Action
+            </h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-ink-dim">
+              One typed sentence, turned into a full storyboard — real camera coverage, a
+              consistent lead character across every frame, exported in minutes.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <TrailerVideo />
           </FadeIn>
         </div>
       </section>
@@ -372,22 +404,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="relative overflow-hidden px-6 py-24">
+      {/* Waitlist / Bottom CTA */}
+      <section id="waitlist" className="relative overflow-hidden px-6 py-24">
         <Blob color="amber" className="bottom-0 left-1/2 h-[300px] w-[800px] -translate-x-1/2" />
         <div className="relative mx-auto max-w-4xl text-center">
           <span className="mb-2 inline-block h-2.5 w-2.5 animate-ping rounded-full bg-tally" />
           <h2 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
-            Bring Your Vision to Life Before Cameras Roll.
+            Get Early Access
           </h2>
           <p className="mx-auto mb-10 mt-3 max-w-xl text-sm text-ink-dim">
-            Stop agonising over blank pages. Turn narrative prose into a cinematic storyboard
-            sequence right now.
+            StoryForge AI is in early access. Reserve your spot and we&rsquo;ll let you know the
+            moment it&rsquo;s your turn.
           </p>
           <FadeIn>
-            <PromptCTA />
+            <WaitlistForm />
           </FadeIn>
-          <p className="mt-4 font-mono text-xs text-ink-dim">No credit card required · Free to start</p>
+          <p className="mt-4 font-mono text-xs text-ink-dim">No credit card required · Free to reserve</p>
         </div>
       </section>
 
@@ -476,9 +508,9 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="hover:text-ink">
-                    Log in
-                  </Link>
+                  <a href="#waitlist" className="hover:text-ink">
+                    Get Early Access
+                  </a>
                 </li>
               </ul>
             </div>

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Check, Info, X } from "lucide-react";
-import Link from "next/link";
 import { MarketingButton } from "./MarketingButton";
 import { Stagger, StaggerItem } from "@/components/motion/Reveal";
 
@@ -143,15 +142,15 @@ export function PricingSection() {
                 </li>
               ))}
             </ul>
-            <Link href="/projects/new" className="mt-6">
+            <a href="#waitlist" className="mt-6">
               <MarketingButton
                 size="sm"
                 variant={tier.highlighted ? "primary" : "outline"}
                 className="w-full"
               >
-                Get Started
+                Get Early Access
               </MarketingButton>
-            </Link>
+            </a>
           </StaggerItem>
         ))}
       </Stagger>
